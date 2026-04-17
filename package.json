@@ -1,0 +1,21 @@
+{
+  "name": "dsclothes-video",
+  "version": "1.0.0",
+  "description": "Vidéo promotionnelle dsclothes.fr — HeyGen HyperFrames",
+  "scripts": {
+    "preview": "hyperframes preview",
+    "render": "hyperframes render ./index.html -o ./output/dsclothes-promo.mp4",
+    "lint": "hyperframes lint .",
+    "doctor": "hyperframes doctor"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:40303/git/dsclothes/dsclothes"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "hyperframes": "^0.4.3"
+  }
+}

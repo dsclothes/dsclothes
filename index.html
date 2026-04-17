@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #080808;
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        background: #080808;
+      }
+
+      /* Vignette overlay */
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at center, transparent 35%, rgba(0, 0, 0, 0.55) 100%);
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      /* Center brand block */
+      #brand-block {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -54%);
+        text-align: center;
+        z-index: 5;
+      }
+
+      #line-top {
+        width: 0;
+        height: 1px;
+        background: #c9a96e;
+        margin: 0 auto 32px;
+        opacity: 0;
+      }
+
+      #brand-ds {
+        font-family: 'Cormorant Garamond', 'Georgia', serif;
+        font-size: 210px;
+        font-weight: 300;
+        letter-spacing: 72px;
+        color: #ffffff;
+        line-height: 1;
+        opacity: 0;
+        padding-left: 72px; /* compensate letter-spacing on last char */
+      }
+
+      #brand-clothes {
+        font-family: 'Cormorant Garamond', 'Georgia', serif;
+        font-size: 74px;
+        font-weight: 300;
+        letter-spacing: 26px;
+        color: #c9a96e;
+        text-transform: uppercase;
+        margin-top: -8px;
+        opacity: 0;
+        padding-left: 26px;
+      }
+
+      #line-bottom {
+        width: 0;
+        height: 1px;
+        background: #c9a96e;
+        margin: 32px auto 0;
+        opacity: 0;
+      }
+
+      #tagline {
+        font-family: 'Montserrat', 'Arial', sans-serif;
+        font-size: 28px;
+        font-weight: 300;
+        letter-spacing: 10px;
+        color: #d8d8d8;
+        text-transform: uppercase;
+        margin-top: 52px;
+        opacity: 0;
+      }
+
+      #collection-label {
+        font-family: 'Montserrat', 'Arial', sans-serif;
+        font-size: 16px;
+        font-weight: 300;
+        letter-spacing: 6px;
+        color: #888888;
+        text-transform: uppercase;
+        margin-top: 60px;
+        opacity: 0;
+      }
+
+      #collection-title {
+        font-family: 'Cormorant Garamond', 'Georgia', serif;
+        font-size: 68px;
+        font-weight: 300;
+        letter-spacing: 14px;
+        color: #ffffff;
+        margin-top: 10px;
+        opacity: 0;
+      }
+
+      /* Bottom CTA */
+      #cta-block {
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        z-index: 5;
+        opacity: 0;
+      }
+
+      #cta-discover {
+        font-family: 'Montserrat', 'Arial', sans-serif;
+        font-size: 18px;
+        font-weight: 300;
+        letter-spacing: 5px;
+        color: #888888;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+
+      #cta-url {
+        font-family: 'Cormorant Garamond', 'Georgia', serif;
+        font-size: 44px;
+        font-weight: 400;
+        letter-spacing: 8px;
+        color: #c9a96e;
+      }
+
+      #cta-underline {
+        width: 0;
+        height: 1px;
+        background: #c9a96e;
+        margin: 10px auto 0;
+      }
+
+      /* Ambient light effect */
+      #ambient {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 900px;
+        height: 600px;
+        background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
+        border-radius: 50%;
+        opacity: 0;
+        z-index: 2;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="15"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Ambient glow -->
+      <div id="ambient" class="clip" data-start="0" data-duration="15" data-track-index="1"></div>
+
+      <!-- Brand block (center) -->
+      <div id="brand-block" class="clip" data-start="0" data-duration="15" data-track-index="2">
+        <div id="line-top"></div>
+        <div id="brand-ds">DS</div>
+        <div id="brand-clothes">Clothes</div>
+        <div id="line-bottom"></div>
+        <div id="tagline">L'élégance accessible.</div>
+        <div id="collection-label">Nouvelle Collection</div>
+        <div id="collection-title">Printemps — Été 2025</div>
+      </div>
+
+      <!-- CTA block (bottom) -->
+      <div id="cta-block" class="clip" data-start="9" data-duration="6" data-track-index="3">
+        <div id="cta-discover">Découvrir maintenant</div>
+        <div id="cta-url">dsclothes.fr</div>
+        <div id="cta-underline"></div>
+      </div>
+
+      <!-- Vignette -->
+      <div id="vignette"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Ambient glow fades in
+      tl.to("#ambient", { opacity: 1, duration: 3, ease: "power2.out" }, 0);
+
+      // Top line draws in
+      tl.fromTo(
+        "#line-top",
+        { width: 0, opacity: 0 },
+        { width: 280, opacity: 1, duration: 1.4, ease: "power3.out" },
+        0.4
+      );
+
+      // "DS" slides up and fades in
+      tl.fromTo(
+        "#brand-ds",
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1.8, ease: "power3.out" },
+        0.8
+      );
+
+      // "CLOTHES" expands letter-spacing and fades in
+      tl.fromTo(
+        "#brand-clothes",
+        { opacity: 0, letterSpacing: "60px" },
+        { opacity: 1, letterSpacing: "26px", duration: 1.6, ease: "power2.out" },
+        2.4
+      );
+
+      // Bottom line draws in
+      tl.fromTo(
+        "#line-bottom",
+        { width: 0, opacity: 0 },
+        { width: 280, opacity: 1, duration: 1.2, ease: "power2.out" },
+        3.2
+      );
+
+      // Tagline fades up
+      tl.fromTo(
+        "#tagline",
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 1.4, ease: "power2.out" },
+        4.8
+      );
+
+      // Collection label
+      tl.fromTo(
+        "#collection-label",
+        { opacity: 0 },
+        { opacity: 1, duration: 1.0, ease: "power2.out" },
+        7.0
+      );
+
+      // Collection title fades up
+      tl.fromTo(
+        "#collection-title",
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
+        7.5
+      );
+
+      // CTA block fades in
+      tl.fromTo(
+        "#cta-block",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
+        9.8
+      );
+
+      // CTA underline draws
+      tl.fromTo(
+        "#cta-underline",
+        { width: 0 },
+        { width: 220, duration: 1.0, ease: "power2.out" },
+        11.0
+      );
+
+      // Ambient light subtle pulse
+      tl.to("#ambient", { scale: 1.15, opacity: 0.7, duration: 5, ease: "sine.inOut" }, 5);
+      tl.to("#ambient", { scale: 1, opacity: 0.4, duration: 5, ease: "sine.inOut" }, 10);
+
+      // Final hold — subtle fade at 14.5s
+      tl.to("#root", { opacity: 0.98, duration: 0.5 }, 14.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
