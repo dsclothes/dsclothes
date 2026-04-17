@@ -2,174 +2,232 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta name="viewport" content="width=1080, height=1920" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@300;400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400&display=swap"
       rel="stylesheet"
     />
     <script src="./node_modules/gsap/dist/gsap.min.js"></script>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
 
-      html,
-      body {
-        width: 1920px;
-        height: 1080px;
+      html, body {
+        width: 1080px;
+        height: 1920px;
         overflow: hidden;
-        background: #080808;
       }
 
       #root {
         position: relative;
-        width: 1920px;
-        height: 1080px;
-        background: #080808;
+        width: 1080px;
+        height: 1920px;
+        background: #faf0e6;
+        overflow: hidden;
       }
 
-      /* Vignette overlay */
-      #vignette {
+      #bg-gradient {
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse at center, transparent 35%, rgba(0, 0, 0, 0.55) 100%);
-        z-index: 10;
-        pointer-events: none;
+        background:
+          radial-gradient(ellipse 70% 50% at 50% 0%,   #f5d6c8 0%, transparent 60%),
+          radial-gradient(ellipse 80% 40% at 80% 100%, #eddcc8 0%, transparent 50%),
+          #faf0e6;
       }
 
-      /* Center brand block */
-      #brand-block {
+      /* Gold frame lines */
+      .frame-line-h {
         position: absolute;
-        top: 50%;
+        left: 52px; right: 52px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #c9935a 20%, #e8c070 50%, #c9935a 80%, transparent);
+        opacity: 0;
+      }
+      #frame-top    { top: 64px; }
+      #frame-bottom { bottom: 64px; }
+
+      /* Gold corner brackets */
+      .frame-corner {
+        position: absolute;
+        width: 36px; height: 36px;
+        opacity: 0;
+      }
+      #fc-tl { top: 52px;    left: 52px;   border-top: 1.5px solid #c9935a; border-left:  1.5px solid #c9935a; }
+      #fc-tr { top: 52px;    right: 52px;  border-top: 1.5px solid #c9935a; border-right: 1.5px solid #c9935a; }
+      #fc-bl { bottom: 52px; left: 52px;   border-bottom: 1.5px solid #c9935a; border-left:  1.5px solid #c9935a; }
+      #fc-br { bottom: 52px; right: 52px;  border-bottom: 1.5px solid #c9935a; border-right: 1.5px solid #c9935a; }
+
+      /* Logo — centered via left calc, NO css transform so GSAP y works freely */
+      #logo-wrap {
+        position: absolute;
+        top: 148px;
+        left: 360px; /* (1080 - 360) / 2 */
+        width: 360px;
+        height: 360px;
+        opacity: 0;
+        filter: drop-shadow(0 14px 44px rgba(200,120,100,0.22));
+      }
+
+      /* "nouvelle" label */
+      #label-nouvelle {
+        position: absolute;
+        top: 568px;
         left: 50%;
-        transform: translate(-50%, -54%);
-        text-align: center;
-        z-index: 5;
-      }
-
-      #line-top {
-        width: 0;
-        height: 1px;
-        background: #c9a96e;
-        margin: 0 auto 32px;
-        opacity: 0;
-      }
-
-      #brand-ds {
-        font-family: 'Cormorant Garamond', 'Georgia', serif;
-        font-size: 210px;
-        font-weight: 300;
-        letter-spacing: 72px;
-        color: #ffffff;
-        line-height: 1;
-        opacity: 0;
-        padding-left: 72px; /* compensate letter-spacing on last char */
-      }
-
-      #brand-clothes {
-        font-family: 'Cormorant Garamond', 'Georgia', serif;
-        font-size: 74px;
-        font-weight: 300;
-        letter-spacing: 26px;
-        color: #c9a96e;
-        text-transform: uppercase;
-        margin-top: -8px;
-        opacity: 0;
-        padding-left: 26px;
-      }
-
-      #line-bottom {
-        width: 0;
-        height: 1px;
-        background: #c9a96e;
-        margin: 32px auto 0;
-        opacity: 0;
-      }
-
-      #tagline {
-        font-family: 'Montserrat', 'Arial', sans-serif;
-        font-size: 28px;
-        font-weight: 300;
-        letter-spacing: 10px;
-        color: #d8d8d8;
-        text-transform: uppercase;
-        margin-top: 52px;
-        opacity: 0;
-      }
-
-      #collection-label {
-        font-family: 'Montserrat', 'Arial', sans-serif;
-        font-size: 16px;
-        font-weight: 300;
-        letter-spacing: 6px;
-        color: #888888;
-        text-transform: uppercase;
-        margin-top: 60px;
-        opacity: 0;
-      }
-
-      #collection-title {
-        font-family: 'Cormorant Garamond', 'Georgia', serif;
-        font-size: 68px;
-        font-weight: 300;
+        transform: translateX(-50%);
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 200;
+        font-size: 22px;
         letter-spacing: 14px;
-        color: #ffffff;
-        margin-top: 10px;
+        color: #b07850;
+        text-transform: uppercase;
+        white-space: nowrap;
         opacity: 0;
       }
 
-      /* Bottom CTA */
-      #cta-block {
+      /* "Collection" — centered via left:0/right:0, NO css transform */
+      #label-collection {
         position: absolute;
-        bottom: 100px;
+        top: 602px;
+        left: 0; right: 0;
+        text-align: center;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 300;
+        font-style: italic;
+        font-size: 96px;
+        letter-spacing: 3px;
+        color: #2a1208;
+        white-space: nowrap;
+        opacity: 0;
+        line-height: 1;
+      }
+
+      /* Gold ornament row */
+      #ornament {
+        position: absolute;
+        top: 724px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        opacity: 0;
+        white-space: nowrap;
+      }
+      .orn-line { height: 1px; background: #c9935a; width: 0; }
+      #orn-r    { background: linear-gradient(90deg, #c9935a, transparent); }
+      .orn-dia  { width: 7px; height: 7px; background: #c9935a; transform: rotate(45deg); flex-shrink: 0; }
+      .orn-dia-sm { width: 4px; height: 4px; background: #c9935a; transform: rotate(45deg); flex-shrink: 0; opacity: .5; }
+
+      /* Date block */
+      #date-block {
+        position: absolute;
+        top: 784px;
+        left: 0; right: 0;
+        text-align: center;
+      }
+      #lbl-dimanche {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 200;
+        font-size: 24px;
+        letter-spacing: 18px;
+        color: #c9935a;
+        text-transform: uppercase;
+        opacity: 0;
+        padding-left: 18px;
+      }
+      #lbl-19 {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 300;
+        font-size: 220px;
+        line-height: 0.85;
+        color: #2a1208;
+        opacity: 0;
+        margin-top: 6px;
+        letter-spacing: -8px;
+      }
+      #lbl-avril {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 300;
+        font-size: 32px;
+        letter-spacing: 14px;
+        color: #8a5030;
+        text-transform: uppercase;
+        opacity: 0;
+        margin-top: 4px;
+        padding-left: 14px;
+      }
+
+      /* Time block */
+      #time-block {
+        position: absolute;
+        top: 1200px;
         left: 50%;
         transform: translateX(-50%);
         text-align: center;
-        z-index: 5;
         opacity: 0;
       }
-
-      #cta-discover {
-        font-family: 'Montserrat', 'Arial', sans-serif;
-        font-size: 18px;
-        font-weight: 300;
-        letter-spacing: 5px;
-        color: #888888;
-        text-transform: uppercase;
-        margin-bottom: 14px;
-      }
-
-      #cta-url {
-        font-family: 'Cormorant Garamond', 'Georgia', serif;
-        font-size: 44px;
-        font-weight: 400;
+      #lbl-a {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 200;
+        font-size: 20px;
         letter-spacing: 8px;
-        color: #c9a96e;
+        color: #c9935a;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+      #lbl-time {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 300;
+        font-size: 128px;
+        letter-spacing: 14px;
+        color: #c9935a;
+        line-height: 1;
+        white-space: nowrap;
       }
 
-      #cta-underline {
-        width: 0;
-        height: 1px;
-        background: #c9a96e;
-        margin: 10px auto 0;
-      }
-
-      /* Ambient light effect */
-      #ambient {
+      /* Subtitle */
+      #lbl-rdv {
         position: absolute;
-        top: 50%;
+        top: 1440px;
         left: 50%;
-        transform: translate(-50%, -50%);
-        width: 900px;
-        height: 600px;
-        background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
-        border-radius: 50%;
+        transform: translateX(-50%);
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 200;
+        font-size: 20px;
+        letter-spacing: 4px;
+        color: #b07850;
+        white-space: nowrap;
         opacity: 0;
-        z-index: 2;
+        font-style: italic;
+      }
+
+      /* URL */
+      #lbl-url {
+        position: absolute;
+        bottom: 110px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 300;
+        font-size: 24px;
+        letter-spacing: 5px;
+        color: #8a5030;
+        white-space: nowrap;
+        opacity: 0;
+      }
+
+      /* Shimmer */
+      #shimmer {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          108deg,
+          transparent 36%,
+          rgba(255,240,210,0.24) 50%,
+          transparent 64%
+        );
+        transform: translateX(-160%);
+        pointer-events: none;
+        z-index: 30;
       }
     </style>
   </head>
@@ -179,122 +237,243 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="15"
-      data-width="1920"
-      data-height="1080"
+      data-duration="20"
+      data-width="1080"
+      data-height="1920"
     >
-      <!-- Ambient glow -->
-      <div id="ambient" class="clip" data-start="0" data-duration="15" data-track-index="1"></div>
+      <!-- Each element gets a unique track-index to avoid overlap conflicts -->
 
-      <!-- Brand block (center) -->
-      <div id="brand-block" class="clip" data-start="0" data-duration="15" data-track-index="2">
-        <div id="line-top"></div>
-        <div id="brand-ds">DS</div>
-        <div id="brand-clothes">Clothes</div>
-        <div id="line-bottom"></div>
-        <div id="tagline">L'élégance accessible.</div>
-        <div id="collection-label">Nouvelle Collection</div>
-        <div id="collection-title">Printemps — Été 2025</div>
+      <div id="bg-gradient" class="clip" data-start="0" data-duration="20" data-track-index="0"></div>
+
+      <!-- Frame -->
+      <div id="frame-top"    class="frame-line-h clip" data-start="0" data-duration="20" data-track-index="1"></div>
+      <div id="frame-bottom" class="frame-line-h clip" data-start="0" data-duration="20" data-track-index="2"></div>
+      <div id="fc-tl" class="frame-corner clip" data-start="0" data-duration="20" data-track-index="3"></div>
+      <div id="fc-tr" class="frame-corner clip" data-start="0" data-duration="20" data-track-index="4"></div>
+      <div id="fc-bl" class="frame-corner clip" data-start="0" data-duration="20" data-track-index="5"></div>
+      <div id="fc-br" class="frame-corner clip" data-start="0" data-duration="20" data-track-index="6"></div>
+
+      <!-- Sparkles SVG layer -->
+      <svg id="sparks-layer"
+           style="position:absolute;inset:0;width:1080px;height:1920px;pointer-events:none"
+           class="clip" data-start="0" data-duration="20" data-track-index="7">
+        <!-- Gold stars -->
+        <g id="sp1" opacity="0"><polygon points="100,22 103,30 112,30 105,35 108,44 100,39 92,44 95,35 88,30 97,30" fill="#d4a853"/></g>
+        <g id="sp2" opacity="0"><polygon points="0,0 2,5 7,5 3,8 4,13 0,10 -4,13 -3,8 -7,5 -2,5" fill="#c9935a" transform="translate(940,148)"/></g>
+        <g id="sp3" opacity="0"><polygon points="0,0 2,5 7,5 3,8 4,13 0,10 -4,13 -3,8 -7,5 -2,5" fill="#e8c070" transform="translate(172,690) scale(0.85)"/></g>
+        <g id="sp4" opacity="0"><polygon points="0,0 2,5 7,5 3,8 4,13 0,10 -4,13 -3,8 -7,5 -2,5" fill="#d4a853" transform="translate(904,870)"/></g>
+        <g id="sp5" opacity="0"><polygon points="0,0 2,5 7,5 3,8 4,13 0,10 -4,13 -3,8 -7,5 -2,5" fill="#c9935a" transform="translate(115,1290) scale(0.75)"/></g>
+        <g id="sp6" opacity="0"><polygon points="0,0 2,5 7,5 3,8 4,13 0,10 -4,13 -3,8 -7,5 -2,5" fill="#e8c070" transform="translate(958,1490)"/></g>
+        <!-- Rose crosses -->
+        <g id="sp7" opacity="0">
+          <line x1="148" y1="458" x2="148" y2="474" stroke="#e8a4b0" stroke-width="1.5"/>
+          <line x1="140" y1="466" x2="156" y2="466" stroke="#e8a4b0" stroke-width="1.5"/>
+        </g>
+        <g id="sp8" opacity="0">
+          <line x1="930" y1="516" x2="930" y2="532" stroke="#d4849a" stroke-width="1.5"/>
+          <line x1="922" y1="524" x2="938" y2="524" stroke="#d4849a" stroke-width="1.5"/>
+        </g>
+        <g id="sp9" opacity="0">
+          <line x1="196" y1="1114" x2="196" y2="1126" stroke="#e8a4b0" stroke-width="1.2"/>
+          <line x1="190" y1="1120" x2="202" y2="1120" stroke="#e8a4b0" stroke-width="1.2"/>
+        </g>
+        <g id="sp10" opacity="0">
+          <line x1="878" y1="1172" x2="878" y2="1186" stroke="#d4849a" stroke-width="1.4"/>
+          <line x1="871" y1="1179" x2="885" y2="1179" stroke="#d4849a" stroke-width="1.4"/>
+        </g>
+        <!-- Tiny dots -->
+        <circle id="dot1" cx="72"  cy="956"  r="3"   fill="#d4a853" opacity="0"/>
+        <circle id="dot2" cx="994" cy="754"  r="2.5" fill="#e8a4b0" opacity="0"/>
+        <circle id="dot3" cx="84"  cy="1574" r="2"   fill="#c9935a" opacity="0"/>
+        <circle id="dot4" cx="994" cy="1394" r="3"   fill="#e8c070" opacity="0"/>
+        <circle id="dot5" cx="540" cy="114"  r="2.5" fill="#e8a4b0" opacity="0"/>
+        <circle id="dot6" cx="438" cy="122"  r="2"   fill="#d4a853" opacity="0"/>
+        <circle id="dot7" cx="642" cy="118"  r="2"   fill="#d4a853" opacity="0"/>
+      </svg>
+
+      <!-- Logo (left: 360px in CSS = centered, no transform) -->
+      <div id="logo-wrap" class="clip" data-start="0" data-duration="20" data-track-index="8">
+        <svg viewBox="0 0 360 360" width="360" height="360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="pinkBg" cx="42%" cy="38%" r="62%">
+              <stop offset="0%"   stop-color="#f2bac8"/>
+              <stop offset="55%"  stop-color="#e098b2"/>
+              <stop offset="100%" stop-color="#c87090"/>
+            </radialGradient>
+            <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="74%"  stop-color="transparent"/>
+              <stop offset="90%"  stop-color="#e8c070" stop-opacity="0.28"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+          <circle cx="180" cy="180" r="178" fill="url(#ringGlow)"/>
+          <circle cx="180" cy="180" r="168" fill="url(#pinkBg)"/>
+          <circle cx="180" cy="180" r="168" fill="none" stroke="#d4a853" stroke-width="1.5" opacity="0.7"/>
+          <circle cx="180" cy="180" r="158" fill="none" stroke="#e8c070" stroke-width="0.6" opacity="0.35"/>
+          <!-- Paint-stroke blob (matches original logo) -->
+          <ellipse cx="180" cy="100" rx="108" ry="33" fill="#a05878" opacity="0.26" transform="rotate(-4,180,100)"/>
+          <!-- "Ds Clothes" in cursive -->
+          <text x="180" y="124"
+            text-anchor="middle"
+            font-family="'Dancing Script', cursive"
+            font-size="66" font-weight="700"
+            fill="#1a0808" letter-spacing="1">Ds Clothes</text>
+          <!-- Heart hints from original packaging -->
+          <text x="96"  y="284" font-size="17" fill="#f0c0cc" opacity="0.5">♥</text>
+          <text x="138" y="310" font-size="13" fill="#f0c0cc" opacity="0.4">♥</text>
+          <text x="214" y="296" font-size="15" fill="#f0c0cc" opacity="0.44">♥</text>
+          <text x="250" y="276" font-size="11" fill="#f0c0cc" opacity="0.34">♥</text>
+          <!-- Gold accent dots (top-right, faithful to original) -->
+          <circle cx="264" cy="70" r="5"   fill="#d4a853" opacity="0.85"/>
+          <circle cx="278" cy="86" r="3.5" fill="#d4a853" opacity="0.65"/>
+          <circle cx="257" cy="87" r="2.5" fill="#e8c070" opacity="0.55"/>
+        </svg>
       </div>
 
-      <!-- CTA block (bottom) -->
-      <div id="cta-block" class="clip" data-start="9" data-duration="6" data-track-index="3">
-        <div id="cta-discover">Découvrir maintenant</div>
-        <div id="cta-url">dsclothes.fr</div>
-        <div id="cta-underline"></div>
+      <div id="label-nouvelle"   class="clip" data-start="3"  data-duration="17" data-track-index="9">nouvelle</div>
+      <div id="label-collection" class="clip" data-start="4"  data-duration="16" data-track-index="10">Collection</div>
+
+      <div id="ornament" class="clip" data-start="5" data-duration="15" data-track-index="11">
+        <div class="orn-line" id="orn-l"></div>
+        <div class="orn-dia-sm"></div>
+        <div class="orn-dia"></div>
+        <div class="orn-dia-sm"></div>
+        <div class="orn-line" id="orn-r" style="background:linear-gradient(90deg,#c9935a,transparent)"></div>
       </div>
 
-      <!-- Vignette -->
-      <div id="vignette"></div>
+      <div id="date-block" class="clip" data-start="6" data-duration="14" data-track-index="12">
+        <div id="lbl-dimanche">Dimanche</div>
+        <div id="lbl-19">19</div>
+        <div id="lbl-avril">Avril</div>
+      </div>
+
+      <div id="time-block" class="clip" data-start="10" data-duration="10" data-track-index="13">
+        <div id="lbl-a">à</div>
+        <div id="lbl-time">16H00</div>
+      </div>
+
+      <div id="lbl-rdv" class="clip" data-start="13" data-duration="7"  data-track-index="14">
+        Rendez-vous sur dsclothes.fr
+      </div>
+
+      <div id="lbl-url" class="clip" data-start="15" data-duration="5"  data-track-index="15">dsclothes.fr</div>
+
+      <div id="shimmer"  class="clip" data-start="16" data-duration="4"  data-track-index="16"></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
 
-      // Ambient glow fades in
-      tl.to("#ambient", { opacity: 1, duration: 3, ease: "power2.out" }, 0);
+      // ── Frame ──
+      tl.to('.frame-line-h',  { opacity: 1, duration: 1.4, ease: 'power2.out' }, 0.2);
+      tl.to('.frame-corner',  { opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power2.out' }, 0.3);
 
-      // Top line draws in
-      tl.fromTo(
-        "#line-top",
-        { width: 0, opacity: 0 },
-        { width: 280, opacity: 1, duration: 1.4, ease: "power3.out" },
-        0.4
+      // ── Logo: scale-bounce in ──
+      tl.fromTo('#logo-wrap',
+        { opacity: 0, scale: 0.52, y: 24 },
+        { opacity: 1, scale: 1,    y: 0,  duration: 1.9, ease: 'back.out(1.5)' },
+        0.6
+      );
+      // Gentle float (no CSS transform conflict since left:360px with no CSS transform)
+      tl.to('#logo-wrap', { y: -20, duration: 3,   ease: 'sine.inOut' }, 2.8);
+      tl.to('#logo-wrap', { y: 0,   duration: 3,   ease: 'sine.inOut' }, 5.8);
+      tl.to('#logo-wrap', { y: -20, duration: 3,   ease: 'sine.inOut' }, 8.8);
+      tl.to('#logo-wrap', { y: 0,   duration: 3,   ease: 'sine.inOut' }, 11.8);
+      tl.to('#logo-wrap', { y: -20, duration: 3,   ease: 'sine.inOut' }, 14.8);
+      tl.to('#logo-wrap', { y: 0,   duration: 3,   ease: 'sine.inOut' }, 17.8);
+
+      // ── Sparkles entrance + pulse ──
+      const sparkIds = ['#sp1','#sp2','#sp3','#sp4','#sp5','#sp6','#sp7','#sp8','#sp9','#sp10'];
+      sparkIds.forEach((id, i) => {
+        const t0 = 0.9 + i * 0.18;
+        tl.fromTo(id,
+          { opacity: 0, scale: 0, transformOrigin: 'center center' },
+          { opacity: 0.9, scale: 1, duration: 0.5, ease: 'back.out(2.2)' },
+          t0
+        );
+        // Subtle pulse × 3
+        [1.4, 3.4, 5.4, 7.4, 9.4, 11.4, 13.4].forEach((dt, j) => {
+          tl.to(id, { opacity: j % 2 === 0 ? 0.25 : 0.85, duration: 2, ease: 'sine.inOut' }, t0 + dt);
+        });
+      });
+      ['#dot1','#dot2','#dot3','#dot4','#dot5','#dot6','#dot7'].forEach((id, i) => {
+        tl.to(id, { opacity: 0.65, duration: 0.45, ease: 'power2.out' }, 0.7 + i * 0.14);
+      });
+
+      // ── "nouvelle" ──
+      tl.fromTo('#label-nouvelle',
+        { opacity: 0, letterSpacing: '28px', y: -14 },
+        { opacity: 1, letterSpacing: '14px', y: 0,   duration: 1.1, ease: 'power3.out' },
+        3.3
       );
 
-      // "DS" slides up and fades in
-      tl.fromTo(
-        "#brand-ds",
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1.8, ease: "power3.out" },
-        0.8
+      // ── "Collection" (no CSS transform, no conflict) ──
+      tl.fromTo('#label-collection',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0,  duration: 1.2, ease: 'power3.out' },
+        4.1
       );
 
-      // "CLOTHES" expands letter-spacing and fades in
-      tl.fromTo(
-        "#brand-clothes",
-        { opacity: 0, letterSpacing: "60px" },
-        { opacity: 1, letterSpacing: "26px", duration: 1.6, ease: "power2.out" },
-        2.4
+      // ── Ornament ──
+      tl.to('#ornament', { opacity: 1, duration: 0.4 }, 5.4);
+      tl.fromTo('#orn-l', { width: 0 }, { width: 130, duration: 0.85, ease: 'power2.out' }, 5.5);
+      tl.fromTo('#orn-r', { width: 0 }, { width: 130, duration: 0.85, ease: 'power2.out' }, 5.5);
+
+      // ── "Dimanche" ──
+      tl.fromTo('#lbl-dimanche',
+        { opacity: 0, letterSpacing: '30px' },
+        { opacity: 1, letterSpacing: '18px', duration: 1.0, ease: 'power2.out' },
+        6.4
       );
 
-      // Bottom line draws in
-      tl.fromTo(
-        "#line-bottom",
-        { width: 0, opacity: 0 },
-        { width: 280, opacity: 1, duration: 1.2, ease: "power2.out" },
-        3.2
+      // ── "19" — slam ──
+      tl.fromTo('#lbl-19',
+        { opacity: 0, scale: 1.4, y: -18 },
+        { opacity: 1, scale: 1,   y: 0,   duration: 0.6, ease: 'back.out(2.4)' },
+        7.6
       );
 
-      // Tagline fades up
-      tl.fromTo(
-        "#tagline",
-        { opacity: 0, y: 18 },
-        { opacity: 1, y: 0, duration: 1.4, ease: "power2.out" },
-        4.8
+      // ── "Avril" ──
+      tl.fromTo('#lbl-avril',
+        { opacity: 0, y: -12 },
+        { opacity: 1, y: 0,   duration: 0.75, ease: 'power2.out' },
+        8.5
       );
 
-      // Collection label
-      tl.fromTo(
-        "#collection-label",
+      // ── Time block ──
+      tl.fromTo('#time-block',
+        { opacity: 0, y: 28 },
+        { opacity: 1, y: 0,  duration: 1.1, ease: 'power3.out' },
+        10.4
+      );
+      // Gold glow pulse on the time
+      tl.to('#lbl-time', { textShadow: '0 0 44px rgba(212,168,83,0.75)', duration: 1.1, ease: 'sine.inOut' }, 12.0);
+      tl.to('#lbl-time', { textShadow: '0 0 14px rgba(212,168,83,0.28)', duration: 1.1, ease: 'sine.inOut' }, 13.1);
+      tl.to('#lbl-time', { textShadow: '0 0 44px rgba(212,168,83,0.75)', duration: 1.1, ease: 'sine.inOut' }, 14.2);
+
+      // ── Subtitle ──
+      tl.fromTo('#lbl-rdv',
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0,  duration: 1.0, ease: 'power2.out' },
+        13.4
+      );
+
+      // ── URL ──
+      tl.fromTo('#lbl-url',
         { opacity: 0 },
-        { opacity: 1, duration: 1.0, ease: "power2.out" },
-        7.0
+        { opacity: 1,  duration: 1.0, ease: 'power2.out' },
+        15.4
       );
 
-      // Collection title fades up
-      tl.fromTo(
-        "#collection-title",
-        { opacity: 0, y: 14 },
-        { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
-        7.5
+      // ── Shimmer sweep ──
+      tl.fromTo('#shimmer',
+        { x: '-160%' },
+        { x: '200%', duration: 1.8, ease: 'power2.inOut' },
+        16.4
       );
 
-      // CTA block fades in
-      tl.fromTo(
-        "#cta-block",
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" },
-        9.8
-      );
-
-      // CTA underline draws
-      tl.fromTo(
-        "#cta-underline",
-        { width: 0 },
-        { width: 220, duration: 1.0, ease: "power2.out" },
-        11.0
-      );
-
-      // Ambient light subtle pulse
-      tl.to("#ambient", { scale: 1.15, opacity: 0.7, duration: 5, ease: "sine.inOut" }, 5);
-      tl.to("#ambient", { scale: 1, opacity: 0.4, duration: 5, ease: "sine.inOut" }, 10);
-
-      // Final hold — subtle fade at 14.5s
-      tl.to("#root", { opacity: 0.98, duration: 0.5 }, 14.5);
-
-      window.__timelines["main"] = tl;
+      window.__timelines['main'] = tl;
     </script>
   </body>
 </html>
